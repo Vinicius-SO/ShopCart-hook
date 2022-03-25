@@ -7,6 +7,7 @@ interface CartProviderProps {
   children: ReactNode;
 }
 
+
 interface UpdateProductAmount {
   productId: number;
   amount: number;
