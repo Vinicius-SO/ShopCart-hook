@@ -37,6 +37,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     try {
       const products = [...cart]
       let selectedProduct =  products.find(product => product.id === productId)
+      console.log(selectedProduct)
 
       const getProduct = await fetch(`http://localhost:3333/products/${productId}`)
       const productData = await getProduct.json()
@@ -47,26 +48,26 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
       if(stockData.amount === selectedProduct?.amount){
         toast.error('Quantidade solicitada fora de estoque');
-      }
-      
-      if(selectedProduct){
-        if(selectedProduct.amount){
-          productData.amount ++
-        }else{
-          selectedProduct={
-            ...selectedProduct,
-            amount:1,
-          }
-        }
-        setCart(products)
       }else{
-        setCart([])
+ 
+        if(selectedProduct){
+          selectedProduct.amount = selectedProduct.amount + 1
+          console.log('Just update')
+          console.log(selectedProduct.amount)
+        }else{
+          products.push({
+            ...productData,
+            amount:1,
+          })
+          console.log(products)
+        }
+        console.log(selectedProduct)
+        setCart(products)
       }
-    } catch {
-      toast.error('Erro na adição do produto');
-    }
+      } catch {
+        toast.error('Erro na adição do produto');
+      }
     
-    console.log(cart)
   };
 
   const removeProduct = (productId: number) => {
