@@ -63,11 +63,11 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         }
         console.log(selectedProduct)
         setCart(products)
+        localStorage.setItem('@RocketShoes:cart', JSON.stringify(cart))
       }
-      } catch {
-        toast.error('Erro na adição do produto');
-      }
-    
+    } catch {
+      toast.error('Erro na adição do produto');
+    }
   };
 
   const removeProduct = (productId: number) => {
