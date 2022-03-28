@@ -61,9 +61,8 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
           })
           console.log(products)
         }
-        console.log(selectedProduct)
+        localStorage.setItem('@RocketShoes:cart', JSON.stringify(products))
         setCart(products)
-        localStorage.setItem('@RocketShoes:cart', JSON.stringify(cart))
       }
     } catch {
       toast.error('Erro na adição do produto');
