@@ -90,9 +90,27 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     amount,
   }: UpdateProductAmount) => {
     try {
-      // TODO
+      const products = [...cart]
+      let selectedProduct =  products.find(product => product.id === productId)
+
+      const getStock = await fetch(`http://localhost:3333/stock/${productId}`)
+      const stockData = await getStock.json()
+
+      
+      if(stockData.amount < amount ){
+        toast.error('Quantidade solicitada fora de estoque');
+      }else{
+        if(selectedProduct){
+          selectedProduct.amount = amount
+        }
+      }
+
+      localStorage.setItem('@RocketShoes:cart', JSON.stringify(products))
+      setCart(products)
+
+
     } catch {
-      // TODO
+      toast.error('Erro na alteração de quantidade do produto');
     }
   };
 

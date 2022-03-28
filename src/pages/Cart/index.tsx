@@ -13,9 +13,11 @@ import { Container, ProductTable, Total } from './styles';
 interface Product {
   id: number;
   title: string;
-  price: number;
+  price: string;
   image: string;
   amount: number;
+  itemTotalValue: string;
+
 }
 
 const Cart = (): JSX.Element => {
@@ -23,7 +25,8 @@ const Cart = (): JSX.Element => {
 
   const cartFormatted = cart.map(product => ({
     ...product,
-    itemTotalValue: formatPrice(product.price * product.amount)
+    itemTotalValue: formatPrice(product.price * product.amount),
+    price: formatPrice(product.price)
   }))
   const total =
     formatPrice(
@@ -33,10 +36,11 @@ const Cart = (): JSX.Element => {
     )
 
   function handleProductIncrement(product: Product) {
-
+    updateProductAmount({productId:product.id, amount:(product.amount + 1)})
   }
 
   function handleProductDecrement(product: Product) {
+    updateProductAmount({productId:product.id, amount:(product.amount - 1)})
   }
 
   function handleRemoveProduct(productId: number) {
@@ -63,17 +67,14 @@ const Cart = (): JSX.Element => {
             </td>
             <td>
               <strong>{product.title}</strong>
-              <span>{new Intl.NumberFormat('pt-br',{
-                    style: 'currency',
-                    currency:'BRL'
-                }).format(product.price)}</span>
+              <span>{product.price}</span>
             </td>
             <td>
               <div>
                 <button
                   type="button"
                   data-testid="decrement-product"
-                // disabled={product.amount <= 1}
+                disabled={product.amount <= 1}
                 onClick={() => handleProductDecrement(product)}
                 >
                   <MdRemoveCircleOutline size={20} />
@@ -87,7 +88,7 @@ const Cart = (): JSX.Element => {
                 <button
                   type="button"
                   data-testid="increment-product"
-                onClick={() => handleProductIncrement(product)}
+                  onClick={() => handleProductIncrement(product)}
                 >
                   <MdAddCircleOutline size={20} />
                 </button>
